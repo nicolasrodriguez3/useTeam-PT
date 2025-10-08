@@ -85,8 +85,9 @@ const Board = () => {
     setColLoading(true)
     try {
       const { createColumn } = await import("../services/api")
-      const res = await createColumn(newColName)
-      setColumns((prev) => [...prev, res.data])
+      // const res = await createColumn(newColName)
+      // setColumns((prev) => [...prev, res.data]) // Ya lo agrega el WS
+      await createColumn(newColName)
       setNewColName("")
       setShowColInput(false)
     } finally {
@@ -108,7 +109,7 @@ const Board = () => {
           {showColInput ? (
             <form
               onSubmit={handleAddColumn}
-              className="bg-gray-100 rounded p-2 flex flex-col gap-2">
+              className="bg-gray-100 text-gray-900 rounded p-2 flex flex-col gap-2">
               <input
                 className="rounded border px-2 py-1 text-sm"
                 value={newColName}
