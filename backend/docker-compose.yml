@@ -1,0 +1,55 @@
+# docker-compose.yml
+services:
+  mongodb:
+    image: mongo:7
+    container_name: kanban-mongodb
+    restart: always
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: kanban
+    volumes:
+      - mongodb_data:/data/db
+      - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - kanban-network
+
+  mongo-express:
+    image: mongo-express:1
+    container_name: kanban-mongo-express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_URL: mongodb://mongodb:27017/kanban?replicaSet=rs0
+      ME_CONFIG_BASICAUTH: false
+    depends_on:
+      - mongodb
+    networks:
+      - kanban-network
+
+  n8n:
+    image: n8nio/n8n
+    container_name: kanban-n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      N8N_BASIC_AUTH_ACTIVE: 'true'
+      N8N_BASIC_AUTH_USER: 'admin'
+      N8N_BASIC_AUTH_PASSWORD: 'admin'
+      N8N_HOST: 'localhost'
+      N8N_PORT: '5678'
+    depends_on:
+      - mongodb
+    networks:
+      - kanban-network
+
+
+volumes:
+  mongodb_data:
+
+networks:
+  kanban-network:
+    driver: bridge

@@ -1,0 +1,130 @@
+{
+  "name": "Kanban export",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "/kanban-export",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "e3ae47fe-2eec-4851-82fb-39aafaae33a5",
+      "name": "Webhook",
+      "webhookId": "afd2c56f-11c2-4932-be52-aab2b40ddf8b"
+    },
+    {
+      "parameters": {
+        "options": {
+          "delimiter": ",",
+          "fileName": "=export_{{ $now }}.csv",
+          "headerRow": true
+        }
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "fb71ed30-c342-4738-b00a-fcc8c48dfd38",
+      "name": "Convert to File",
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Webhook').item.json.body.email }}",
+        "subject": "Novedades en tu tablero",
+        "emailType": "text",
+        "message": "Se adjuntan datos en csv",
+        "options": {
+          "attachmentsUi": {
+            "attachmentsBinary": [
+              {}
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        624,
+        0
+      ],
+      "id": "c62d481a-ae66-4dad-b00a-2ca88afd2dc1",
+      "name": "Send a message",
+      "webhookId": "f756da12-078f-4c44-ad10-9fc3085270d9",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "71JrJtc4wEerCkpi",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nreturn $input.first().json.body.tasks"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        208,
+        0
+      ],
+      "id": "a473ff71-a597-49ce-9088-f0e96257fa98",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "4fb7d2c8-1521-4d6e-b924-163a439f1cf4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "48b7f725f0e405cbd9edf8408160c3011f3d2e91f4fb044d83a90b93781e7262"
+  },
+  "id": "b1MFgkkqIHNQdvmc",
+  "tags": []
+}

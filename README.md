@@ -1,192 +1,113 @@
-# :test_tube: Prueba Técnica – Tablero Kanban Colaborativo en Tiempo Real
+# 📋 Tablero Kanban Colaborativo en Tiempo Real
 
-## :dart: Objetivo
+Sistema de gestión de tareas tipo Trello con funcionalidades de colaboración en tiempo real y exportación automatizada.
 
-Desarrollar una aplicación tipo **Trello** que permita la gestión de tareas mediante un **tablero Kanban** con soporte para **colaboración en tiempo real**. El sistema debe incluir columnas personalizables, tarjetas movibles y funcionalidad de drag & drop fluida.
+## 🌟 Características Principales
 
----
+- ✨ Colaboración en tiempo real
+- 🔄 Drag & Drop para mover tareas
+- 📊 Columnas personalizables
+- 📧 Exportación vía email
 
-## :gear: Tecnologías Requeridas
+## 🛠️ Tecnologías Utilizadas
 
 ### Frontend
-
-- **React.js** para la construcción de la interfaz.
-- Implementación de **drag & drop** para mover tarjetas entre columnas.
+- React.js
+- Socket.io Client
+- Drag & Drop
+- TypeScript
 
 ### Backend
+- NestJS
+- Socket.io
+- MongoDB
+- Prisma ORM
 
-- **NestJS** con soporte de **WebSocket** para simular la colaboración en tiempo real.
-- Uso de **MongoDB** para el almacenamiento de datos.
-- Implementación de **Socket.io** para comunicación bidireccional.
-- **Notificaciones en tiempo real** para reflejar los cambios realizados por otros usuarios.
+### Automatización
+- N8N (v1.106.3)
+- Webhooks
+- CSV Generation
+- Email Service
 
----
+## 🚀 Instalación y Configuración
 
-## :mailbox: Funcionalidad Adicional Requerida
+### Prerequisitos
+- Node.js >= 18
+- MongoDB
+- Docker
+- pnpm
 
-### Exportación de Backlog vía Email en CSV
+### Variables de Entorno
 
-Implementar un sistema de exportación automatizada del backlog del tablero Kanban utilizando **N8N** para generar flujos de trabajo automatizados.
-
-#### :gear: Tecnologías Adicionales
-
-- **N8N** para automatización de flujos de trabajo
-- **Webhooks** para comunicación entre sistemas
-- **CSV Generation** para estructuración de datos
-- **Email Service** para envío de reportes
-
-#### :dart: Requisitos de la Funcionalidad
-
-1. **Trigger desde Frontend**: Botón de exportación en la interfaz del tablero
-2. **Endpoint de Exportación**: API en NestJS que dispare el flujo N8N
-3. **Flujo N8N Automatizado**:
-   - Extracción de datos del tablero Kanban
-   - Estructuración de datos en formato CSV
-   - Envío automático por email
-4. **Configuración de Exportación**:
-   - Email destino configurable
-   - Selección de campos a exportar (Opcional)
-5. **Notificaciones de Estado**:
-   - Confirmación de solicitud de exportación
-   - Notificación de envío exitoso/fallido
-
-#### :file_folder: Estructura del CSV de Exportación
-
-El archivo CSV exportado debe incluir:
-
-- **ID de tarea** (identificador único)
-- **Título** (nombre de la tarea)
-- **Descripción** (detalles de la tarea)
-- **Columna** (posición actual en el tablero)
-- **Fecha de creación** (timestamp de creación)
-
-#### :arrow_forward: Flujo de Trabajo
-
-```
-[Frontend] → [NestJS API] → [N8N Webhook] → [Data Extraction] → [CSV Generation] → [Email Delivery] → [User Notification]
+```env
+# Backend
+DATABASE_URL="mongodb://localhost:27017/kanban?directConnection=true"
+N8N_WEBHOOK_URL=http://localhost:5678/webhook/kanban-export
 ```
 
-1. Usuario hace clic en "Exportar Backlog"
-2. Frontend envía solicitud a endpoint `/api/export/backlog`
-3. NestJS dispara webhook a N8N
-4. N8N extrae datos del tablero Kanban
-5. N8N estructura datos en formato CSV
-6. N8N envía email con archivo CSV adjunto
-7. Sistema notifica al usuario el estado de la exportación
+### Instalación Manual
 
----
+1. **Backend**
+```bash
+cd backend
+docker compose up -d
+pnpm install
+pnpx prisma generate
+pnpm start:dev
+```
 
-## :package: Forma de Entrega
+2. **Frontend**
+```bash
+cd frontend
+pnpm install
+pnpm dev
+```
 
-### :fork_and_knife: Fork del Repositorio
+## 💡 Uso
 
-1. **Fork** este repositorio a tu cuenta de GitHub
-2. **Clona** tu fork localmente
-3. **Desarrolla** la solución completa en tu fork
-4. **Sube** todos los cambios a tu repositorio
+### Tablero Kanban
+1. Accede a la aplicación en `http://localhost:5173`
+2. Crea nuevas columnas para organizar tus tareas
+3. Añade tareas a las columnas
+4. Arrastra y suelta las tareas entre columnas
+5. Observa cómo los cambios se sincronizan en tiempo real
 
-### :file_folder: Estructura de Archivos Requerida
+### Exportación de Backlog
+1. Haz clic en el botón "Exportar Backlog"
+2. Configura el email de destino
+3. Espera la notificación de envío exitoso
+4. Revisa tu correo para encontrar el archivo CSV
+
+## 📁 Estructura del Proyecto
 
 ```
 useTeam-PT/
 ├── README.md
-├── .env.example
 ├── frontend/
 │   ├── package.json
-│   ├── src/
-│   └── ...
+│   └── src/
 ├── backend/
 │   ├── package.json
 │   ├── src/
-│   └── ...
-├── n8n/
-│   ├── workflow.json
-│   └── setup-instructions.md
-└── docker-compose.yml (Opcional)
+│   └── docker-compose.yml
+└── n8n/
+    ├── workflow.json
+    └── setup-instructions.md
 ```
 
-### :gear: Archivos de Configuración
+## 📊 Formato del CSV Exportado
 
-#### `.env.example`
+El archivo CSV incluye los siguientes campos:
+- ID de tarea
+- Título
+- Descripción
+- Columna actual
+- Fecha de creación
 
-Debe incluir todas las variables de entorno necesarias:
+## 🔄 Flujo de Exportación
 
-```env examle
-# Database
-MONGODB_URI=mongodb://localhost:27017/kanban-board
-
-# Backend
-PORT=3000
-N8N_WEBHOOK_URL=http://localhost:5678/webhook/kanban-export
-
-# Frontend
-REACT_APP_API_URL=http://localhost:3000/api
-REACT_APP_WS_URL=ws://localhost:3000
-```
-
-#### `n8n/workflow.json`
-
-Archivo JSON del flujo de N8N para exportación de backlog.
-
-#### `n8n/setup-instructions.md`
-
-Instrucciones detalladas para configurar y ejecutar el flujo N8N.
-
-### :whale: Docker Compose (Opcional)
-
-Incluir archivo `docker-compose.yml` con:
-
-- Servicio de MongoDB
-- Servicio de N8N (versión 1.106.3)
-- Configuración de redes y volúmenes
-
-### :rocket: Comando para N8N
-
-Comando para levantar una instancia local de N8N
-
-```bash
-docker run -it --rm \
-  --name n8n \
-  -p 5678:5678 \
-  -v ~/.n8n:/home/node/.n8n \
-  n8nio/n8n:latest
-```
-
-### :memo: Documentación Adicional
-
-- **README.md** actualizado con instrucciones de instalación y ejecución
-- **Comentarios en código** explicando la lógica compleja
-
-### :lock: Finalización de la Prueba
-
-Una vez finalizada la implementación:
-
-1. **Invitar** a los siguientes usuarios como colaboradores al repositorio:
-
-   - `rodriguezibrahin3@gmail.com`
-   - `jonnahuel78@gmail.com`
-   - `administracion@useteam.io`
-
-2. **NO realizar más commits** después de invitar a los usuarios
-
----
-
-## :brain: Evaluación
-
-Durante el desarrollo de esta prueba se evaluarán:
-
-- **Pensamiento asincrónico** y manejo de procesos en tiempo real.
-- **Lógica compleja en el frontend**, especialmente en la interacción y estado compartido.
-- Gestión adecuada de **eventos y sincronización** entre múltiples usuarios.
-
----
-
-## :pushpin: Recomendaciones
-
-- Enfócate en una buena experiencia de usuario (UX).
-- Prioriza un código limpio, modular y mantenible.
-- Usa comentarios breves y precisos donde la lógica sea compleja.
-
----
-
-¡Buena suerte! :rocket:
+1. Usuario solicita exportación desde el frontend
+2. Backend procesa la solicitud
+3. N8N recibe webhook y extrae datos
+4. Generación y estructuración del CSV
+5. Envío por email
