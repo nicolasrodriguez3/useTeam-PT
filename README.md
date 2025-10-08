@@ -47,16 +47,20 @@ N8N_WEBHOOK_URL=http://localhost:5678/webhook/kanban-export
 
 ### Instalación Manual
 
-1. **Backend**
+1. **Iniciar los contenedores de MongoDB y n8n**
+```bash
+docker compose up -d
+```
+
+2. **Backend**
 ```bash
 cd backend
-docker compose up -d
 pnpm install
 pnpx prisma generate
 pnpm start:dev
 ```
 
-2. **Frontend**
+3. **Frontend**
 ```bash
 cd frontend
 pnpm install
