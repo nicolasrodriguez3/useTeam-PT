@@ -11,7 +11,7 @@ services:
       MONGO_INITDB_DATABASE: kanban
     volumes:
       - mongodb_data:/data/db
-      - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+      - ./backend/scripts/init-replica.sh:/docker-entrypoint-initdb.d/init-replica.sh:ro
     networks:
       - kanban-network
 
