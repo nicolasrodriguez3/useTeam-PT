@@ -12,18 +12,21 @@ Sistema de gestión de tareas tipo Trello con funcionalidades de colaboración e
 ## 🛠️ Tecnologías Utilizadas
 
 ### Frontend
+
 - React.js
 - Socket.io Client
 - Drag & Drop
 - TypeScript
 
 ### Backend
+
 - NestJS
 - Socket.io
 - MongoDB
 - Prisma ORM
 
 ### Automatización
+
 - N8N (v1.106.3)
 - Webhooks
 - CSV Generation
@@ -32,6 +35,7 @@ Sistema de gestión de tareas tipo Trello con funcionalidades de colaboración e
 ## 🚀 Instalación y Configuración
 
 ### Prerequisitos
+
 - Node.js >= 18
 - MongoDB
 - Docker
@@ -41,18 +45,20 @@ Sistema de gestión de tareas tipo Trello con funcionalidades de colaboración e
 
 ```env
 # Backend
-DATABASE_URL="mongodb://localhost:27017/kanban?directConnection=true"
+DATABASE_URL="mongodb://127.0.0.1:27017/kanban?replicaSet=rs0&directConnection=true"
 N8N_WEBHOOK_URL=http://localhost:5678/webhook/kanban-export
 ```
 
 ### Instalación Manual
 
 1. **Iniciar los contenedores de MongoDB y n8n**
+
 ```bash
 docker compose up -d
 ```
 
 2. **Backend**
+
 ```bash
 cd backend
 pnpm install
@@ -61,6 +67,7 @@ pnpm start:dev
 ```
 
 3. **Frontend**
+
 ```bash
 cd frontend
 pnpm install
@@ -70,6 +77,7 @@ pnpm dev
 ## 💡 Uso
 
 ### Tablero Kanban
+
 1. Accede a la aplicación en `http://localhost:5173`
 2. Crea nuevas columnas para organizar tus tareas
 3. Añade tareas a las columnas
@@ -77,6 +85,7 @@ pnpm dev
 5. Observa cómo los cambios se sincronizan en tiempo real
 
 ### Exportación de Backlog
+
 1. Haz clic en el botón "Exportar Backlog"
 2. Configura el email de destino
 3. Espera la notificación de envío exitoso
@@ -102,6 +111,7 @@ useTeam-PT/
 ## 📊 Formato del CSV Exportado
 
 El archivo CSV incluye los siguientes campos:
+
 - ID de tarea
 - Título
 - Descripción
