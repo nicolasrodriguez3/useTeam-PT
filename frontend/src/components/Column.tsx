@@ -16,7 +16,7 @@ const Column = ({ column, tasks }: ColumnProps) => {
   const columnId = `column-${column.id}`
   const { setNodeRef, isOver } = useDroppable({ id: columnId })
   const [menuOpen, setMenuOpen] = useState(false)
-  
+
 
   return (
     <div
@@ -25,7 +25,7 @@ const Column = ({ column, tasks }: ColumnProps) => {
       <div className="flex justify-between items-center mb-2">
         <h2 className="font-bold">{column.name}</h2>
         <div className="relative">
-          <button 
+          <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="p-1 hover:bg-gray-200 rounded"
           >
@@ -33,7 +33,18 @@ const Column = ({ column, tasks }: ColumnProps) => {
           </button>
           {menuOpen && (
             <div className="absolute right-0 mt-1 bg-white shadow-lg rounded-md py-1 z-10">
-              
+              <button
+                onClick={() => setMenuOpen(false)}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Editar Columna
+              </button>
+              <button
+                onClick={() => setMenuOpen(false)}
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Eliminar Columna
+              </button>
             </div>
           )}
         </div>
@@ -48,7 +59,7 @@ const Column = ({ column, tasks }: ColumnProps) => {
         </div>
       </SortableContext>
       <AddTaskButton columnId={column.id} />
-      
+
     </div>
   )
 }
